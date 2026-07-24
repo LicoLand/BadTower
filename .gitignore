@@ -1,0 +1,10 @@
+node_modules/
+build/
+coverage/
+*.log
+.DS_Store
+
+# Local-only governance assets (plans, reports, caches)
+/docs/plans/
+/docs/reports/
+/cache/

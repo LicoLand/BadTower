@@ -1,0 +1,19 @@
+{
+  "name": "@licoland/badtower",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "license": "AGPL-3.0-or-later",
+  "description": "Untrusted opaque relay node for Fabrigent federation transports.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LicoLand/BadTower.git"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "verify": "node tools/verify-boundary.mjs && npm test"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
