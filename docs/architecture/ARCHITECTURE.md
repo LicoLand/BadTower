@@ -20,7 +20,7 @@ authenticate peers and protect confidentiality and integrity end to end.
 | Artifact loader | `src/fabrigent.mjs` | Loads the vendored Fabrigent artifact, verifies its self-digest and the pinned SHA-256, and asserts the untrusted-relay governance policy. |
 | Public entry | `src/index.mjs` | Re-exports the relay and the artifact loader. |
 | Boundary check | `tools/verify-boundary.mjs` | Fails verification if forbidden authority-capability markers appear outside the exempted boundary files. |
-| Vendored artifact | `vendor/fabrigent-v1.json` | Fabrigent `v1` contract, governance policy, and conformance fixtures. |
+| Vendored artifact | `vendor/fabrigent-v2.json` | Fabrigent `v2` contract, governance policy, and conformance fixtures. |
 
 ## Trust boundaries
 
@@ -30,11 +30,14 @@ authenticate peers and protect confidentiality and integrity end to end.
   `envelopeId`, `mailboxId`, `ciphertext`, and `expiresAt`, and the relay
   rejects anything else.
 - Retention is bounded by the vendored policy limits (ciphertext size,
-  lease duration, envelopes per mailbox), and all state is in memory.
+  envelope lifetime, lease duration, envelopes per mailbox, mailbox count,
+  and relay-wide envelope count), and all state is in memory.
 
 ## Failure model
 
 - Artifact self-digest or pin mismatch: fail closed at load time.
 - Unknown envelope fields or contract versions: rejected at delivery.
+- Conflicting reuse of an envelope identifier: rejected at delivery.
 - Missing or expired lease: mailbox operations are refused.
-- Expired envelopes and expired mailboxes: removed by cleanup.
+- Expired envelopes are removed before delivery or receipt and by cleanup;
+  expired mailboxes are removed by cleanup.

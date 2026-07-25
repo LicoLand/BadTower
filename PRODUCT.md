@@ -10,7 +10,7 @@ LicoTower codebase and keeps only the untrusted relay responsibilities.
 The relay is untrusted by design:
 
 - It handles only the opaque ciphertext envelopes defined by the Fabrigent
-  `fabrigent.relay.v1` contract.
+  `fabrigent.relay.v2` contract.
 - It cannot decrypt content and never holds client keys or key material.
 - It is not an identity, policy, permission, encryption, or client
   coordination authority.
@@ -23,7 +23,7 @@ The relay is untrusted by design:
 - Mailboxes with bounded ciphertext retention.
 - Delivery leases, acknowledgements, quotas, expiry, and cleanup.
 - Fail-closed consumption of the pinned Fabrigent protocol artifact
-  (`vendor/fabrigent-v1.json`, pinned by SHA-256 in `src/fabrigent.mjs`).
+  (`vendor/fabrigent-v2.json`, pinned by SHA-256 in `src/fabrigent.mjs`).
 
 ## Explicit non-goals
 
