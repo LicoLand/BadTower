@@ -7,6 +7,8 @@ formal documentation set. Local plans and reports stay in the ignored
 ## Formal documents
 
 - [Runbook](RUNBOOK.md) — verification and service-local operation.
+- [Governed release status](releases/README.md) — structured version plan and
+  generated release projection.
 - [Compatibility](COMPATIBILITY.md) — runtime, contract, and pin
   compatibility.
 - [Entity configuration layout](ENTITY-CONFIG-LAYOUT.md) — the complete
