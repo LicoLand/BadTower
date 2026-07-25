@@ -8,8 +8,8 @@ surface so operators can audit it in one place.
 
 | Input | Authority | Notes |
 | --- | --- | --- |
-| Policy limits | `vendor/fabrigent-v1.json` (`policies/v1/relay-governance.json`) | Maximum ciphertext bytes, maximum lease seconds, maximum envelopes per mailbox. |
-| Artifact pin | `PINNED_FABRIGENT_DIGEST` in `src/fabrigent.mjs` | SHA-256 of the vendored artifact sources. |
+| Policy limits | `vendor/fabrigent-v2.json` (`policies/v2/relay-governance.json`) | Maximum ciphertext bytes, retention, lease seconds, mailbox envelopes, mailboxes, and relay envelopes. |
+| Artifact pin | `PINNED_FABRIGENT_DIGEST` in `src/fabrigent.mjs` | SHA-256 of the vendored artifact metadata and sources. |
 
 ## Rules
 

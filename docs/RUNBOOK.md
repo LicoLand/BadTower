@@ -30,7 +30,8 @@ matches its self-digest or the pinned SHA-256. When this happens:
 1. Do not bypass the check; the node must not run against a changed
    artifact.
 2. Confirm the replacement artifact in the Fabrigent repository.
-3. Update `vendor/fabrigent-v1.json` and `PINNED_FABRIGENT_DIGEST` in one
+3. Update the versioned artifact under `vendor/` and
+   `PINNED_FABRIGENT_DIGEST` in one
    change, then rerun `npm run verify`.
 
 ## Boundary scan findings
