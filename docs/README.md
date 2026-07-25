@@ -15,7 +15,7 @@ formal documentation set. Local plans and reports stay in the ignored
   boundaries, and failure model.
 - [Relay operations](functionality/RELAY-OPERATIONS.md) — mailbox, lease,
   delivery, quota, acknowledgement, and cleanup behavior.
-- [Fabrigent relay contract v1](protocols/FABRIGENT-RELAY-V1.md) — the
+- [Fabrigent relay contract v2](protocols/FABRIGENT-RELAY-V2.md) — the
   pinned contract, governance policy, and digest verification.
 - [Examples](examples/README.md) — synthetic usage walkthrough.
 - [Architecture decision records](adrs/README.md) — ADR index and rules.
