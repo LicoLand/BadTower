@@ -1,6 +1,8 @@
-node_modules/
 build/
 coverage/
+data/
+*.db
+*.db.lock
 *.log
 .DS_Store
 
