@@ -7,8 +7,8 @@
 
 ## Protocol
 
-- The only supported relay contract is Fabrigent `fabrigent.relay.v1`,
-  consumed through the vendored artifact `vendor/fabrigent-v1.json`.
+- The only supported relay contract is Fabrigent `fabrigent.relay.v2`,
+  consumed through the vendored artifact `vendor/fabrigent-v2.json`.
 - The artifact is pinned by SHA-256 (`PINNED_FABRIGENT_DIGEST` in
   `src/fabrigent.mjs`). Any change to the artifact content or its
   governance boundary fails closed; there are no compatibility aliases or

@@ -14,7 +14,7 @@ const mailboxId = "box_000000000001";
 relay.lease(mailboxId, 60);
 
 const envelope = {
-  contractVersion: "fabrigent.relay.v1",
+  contractVersion: "fabrigent.relay.v2",
   envelopeId: "env_000000000001",
   mailboxId,
   ciphertext: "synthetic-ciphertext",
