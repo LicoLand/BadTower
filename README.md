@@ -3,18 +3,38 @@
 **[简体中文](README.zh-CN.md)** — English is the normative language of this
 README pair; the Simplified Chinese version is the localized language version.
 
-BadTower is an intentionally untrusted communication node. It stores and
-forwards opaque encrypted envelopes between LicoUp clients and implements only
-mailboxes, leases, quotas, acknowledgements, expiry, and cleanup.
+BadTower is a general-purpose, independently operated communication station in
+the Lico Arc Network. It is assumed to be malicious by every endpoint and
+stores and forwards only opaque Lico Arc Protocol transport units.
 
-BadTower cannot decrypt content and is not an identity, policy, permission,
-encryption, or client-runtime authority. Clients must authenticate peers and
-protect message confidentiality and integrity end to end.
+LicoUp and other endpoints may pass traffic through a BadTower, but never
+integrate with it as a trusted product or delegate identity, encryption,
+integrity, delivery, or security authority to it. HTTP responses, storage,
+queues, leases, acknowledgements, and receipts are station-local,
+untrusted transport hints. Endpoint security remains end to end.
 
-This implementation pins the vendored Fabrigent `v2` artifact by SHA-256 and
-fails closed when its content or governance boundary changes.
+BadTower has no source, build, vendored-artifact, or runtime dependency on the
+LicoArc repository. Its default local relay profile accepts the published
+`licoarc.relay.v1` wire identifier, while BadTower owns its operational limits
+and release lifecycle.
 
-Run `npm run verify`.
+BadTower is implemented in Go. Its HTTP service persists opaque transport
+units in a local bbolt database and exposes station-local lease, delivery,
+receive, and acknowledgement operations.
+
+Run the service:
+
+```sh
+go run ./cmd/badtower
+```
+
+Run repository verification:
+
+```sh
+go test -race ./...
+go vet ./...
+go build ./...
+```
 
 ## Documentation
 

@@ -1,27 +1,38 @@
 # Compatibility
 
-## Runtime
+## Production implementation
 
-- Node.js 22 or newer, as declared in `package.json` `engines`.
-- The package is ESM-only (`"type": "module"`).
+- Go 1.26 or newer is the production implementation boundary.
+- The supported executable entry is `go run ./cmd/badtower` or a binary built
+  from that package.
+- HTTP paths and the closed JSON envelope are the service compatibility
+  surface. Internal Go packages are not a client SDK contract.
 
 ## Protocol
 
-- The only supported relay contract is Fabrigent `fabrigent.relay.v2`,
-  consumed through the vendored artifact `vendor/fabrigent-v2.json`.
-- The artifact is pinned by SHA-256 (`PINNED_FABRIGENT_DIGEST` in
-  `src/fabrigent.mjs`). Any change to the artifact content or its
-  governance boundary fails closed; there are no compatibility aliases or
-  dual-contract modes.
+- The default BadTower relay profile accepts the published wire identifier
+  `licoarc.relay.v1`.
+- Compatibility is an explicit wire-level claim, not a source, build,
+  vendored-artifact, runtime, or synchronized-release dependency on LicoArc.
+- Additional identifiers require an explicit validated BadTower relay profile
+  and independent behavior tests. A profile cannot raise the implementation
+  ceilings.
 - Envelopes carrying fields outside the contract are rejected.
+- Compatibility covers only the opaque outer transport-unit boundary. It
+  creates no LicoUp-specific API, endpoint identity, encryption, trust,
+  delivery-proof, or synchronized-release relationship.
+- BadTower HTTP, storage, ordering, queue, lease, acknowledgement, receipt,
+  clock, and retry behavior remains service-local and untrusted.
 
 ## State and migration
 
-- BadTower initializes fresh state only. It never discovers, imports,
-  renames, or converts state from the retired LicoTower codebase or any
-  other retired product name.
-- Mailbox state is held in memory and bounded by the vendored policy
-  limits; restarting the process drops retained envelopes.
+- BadTower initializes only its current database format. It never discovers,
+  imports, renames, or converts state from a retired product.
+- Mailbox state is held in one local bbolt database and bounded by the relay
+  profile. Restarting the same service with the same data path preserves
+  active leases and unexpired opaque transport units.
+- The database is marked `badtower.station-store.v1`. An unknown store version
+  fails closed; BadTower does not guess, import, or mutate it.
 
 ## Versioning
 
