@@ -1,11 +1,10 @@
 {
-  "artifactVersion": "fabrigent.bundle.v1",
+  "artifactVersion": "fabrigent.bundle.v2",
   "digestAlgorithm": "sha256",
-  "digest": "bf63cd32b9e24ac1c079ffd5b853e797cdd505c05e0defd4149a9207e2da4697",
   "sources": {
-    "contracts/v1/relay-envelope.schema.json": {
+    "contracts/v2/relay-envelope.schema.json": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://licoarc.com/contracts/v1/relay-envelope.schema.json",
+      "$id": "https://licoarc.com/contracts/v2/relay-envelope.schema.json",
       "title": "Fabrigent opaque relay envelope",
       "type": "object",
       "additionalProperties": false,
@@ -18,7 +17,7 @@
       ],
       "properties": {
         "contractVersion": {
-          "const": "fabrigent.relay.v1"
+          "const": "fabrigent.relay.v2"
         },
         "envelopeId": {
           "type": "string",
@@ -39,8 +38,8 @@
         }
       }
     },
-    "policies/v1/relay-governance.json": {
-      "policyVersion": "fabrigent.relay-governance.v1",
+    "policies/v2/relay-governance.json": {
+      "policyVersion": "fabrigent.relay-governance.v2",
       "trustModel": "relay-is-untrusted",
       "requiredCapabilities": [
         "opaque-envelope-relay",
@@ -59,24 +58,27 @@
       ],
       "limits": {
         "maxCiphertextBytes": 1048576,
+        "maxEnvelopeRetentionSeconds": 86400,
         "maxLeaseSeconds": 86400,
-        "maxMailboxEnvelopes": 1000
+        "maxMailboxEnvelopes": 1000,
+        "maxMailboxes": 1000,
+        "maxRelayEnvelopes": 10000
       }
     },
-    "conformance/v1/valid.json": [
+    "conformance/v2/valid.json": [
       {
-        "contractVersion": "fabrigent.relay.v1",
+        "contractVersion": "fabrigent.relay.v2",
         "envelopeId": "env_000000000001",
         "mailboxId": "box_000000000001",
         "ciphertext": "synthetic-ciphertext",
         "expiresAt": "2030-01-01T00:00:00.000Z"
       }
     ],
-    "conformance/v1/invalid.json": [
+    "conformance/v2/invalid.json": [
       {
         "name": "plaintext-field-is-forbidden",
         "value": {
-          "contractVersion": "fabrigent.relay.v1",
+          "contractVersion": "fabrigent.relay.v2",
           "envelopeId": "env_000000000002",
           "mailboxId": "box_000000000002",
           "ciphertext": "synthetic-ciphertext",
@@ -87,12 +89,13 @@
       {
         "name": "ciphertext-is-required",
         "value": {
-          "contractVersion": "fabrigent.relay.v1",
+          "contractVersion": "fabrigent.relay.v2",
           "envelopeId": "env_000000000003",
           "mailboxId": "box_000000000003",
           "expiresAt": "2030-01-01T00:00:00.000Z"
         }
       }
     ]
-  }
+  },
+  "digest": "f1ecb7061131b3a4dee1af5004d663c407f2dfaee93a379a5262aad3fe110e3f"
 }

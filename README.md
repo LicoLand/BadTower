@@ -11,7 +11,7 @@ BadTower cannot decrypt content and is not an identity, policy, permission,
 encryption, or client-runtime authority. Clients must authenticate peers and
 protect message confidentiality and integrity end to end.
 
-This implementation pins the vendored Fabrigent `v1` artifact by SHA-256 and
+This implementation pins the vendored Fabrigent `v2` artifact by SHA-256 and
 fails closed when its content or governance boundary changes.
 
 Run `npm run verify`.
