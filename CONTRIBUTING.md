@@ -13,7 +13,7 @@ authority.
   plaintext handling, identity proof, local approval or local effect
   behavior, federation policy, or client coordination behavior.
 - Consume Fabrigent protocol artifacts only through the pinned vendored
-  bundle (`vendor/fabrigent-v1.json`); never import sibling repository
+  bundle (`vendor/fabrigent-v2.json`); never import sibling repository
   source. Protocol changes belong to Fabrigent; update the vendored
   artifact and the SHA-256 pin in `src/fabrigent.mjs` in one change.
 - Keep configuration explicit, bounded, and fail closed. Do not add

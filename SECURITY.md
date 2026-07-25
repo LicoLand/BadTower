@@ -21,7 +21,7 @@ BadTower is an intentionally untrusted relay node:
 - It stores and forwards only opaque ciphertext envelopes; confidentiality
   and integrity are protected end to end by LicoUp clients.
 - It holds no client keys and has no decryption capability by design.
-- The Fabrigent `v1` artifact is pinned by SHA-256, and the node fails
+- The Fabrigent `v2` artifact is pinned by SHA-256, and the node fails
   closed when the artifact content or its governance boundary changes.
 
 Reports about any weakening of this boundary are in scope.
