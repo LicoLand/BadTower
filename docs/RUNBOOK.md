@@ -1,42 +1,59 @@
 # BadTower Runbook
 
-BadTower currently ships as a library plus verification tooling. This
-runbook covers routine verification and service-local checks. It does not
-describe a networked deployment; the repository does not implement one yet.
+BadTower ships as a Go HTTP station service with a local transactional bbolt
+database. This runbook covers routine verification and service-local
+operation.
 
 ## Prerequisites
 
-- Node.js 22 or newer, as declared in `package.json` `engines`.
+- Go 1.26 or newer, as declared in `go.mod`.
 - A clean checkout of the repository.
 
 ## Routine verification
 
-Run the full repository closure:
+Run the final repository closure after targeted package tests:
 
 ```sh
-npm run verify
+go test -race ./...
+go vet ./...
+go build ./...
 ```
 
-This executes `node tools/verify-boundary.mjs` (pinned artifact digest and
-forbidden-capability boundary scan) followed by `npm test` (the relay test
-suite in `tests/relay.test.mjs`). Both must pass before any change is
-published.
+Format checks must also produce no paths:
 
-## Fabrigent pin mismatch
+```sh
+test -z "$(gofmt -l .)"
+```
 
-`src/fabrigent.mjs` fails closed when the vendored artifact no longer
-matches its self-digest or the pinned SHA-256. When this happens:
+## Relay profile rejection
 
-1. Do not bypass the check; the node must not run against a changed
-   artifact.
-2. Confirm the replacement artifact in the Fabrigent repository.
-3. Update the versioned artifact under `vendor/` and
-   `PINNED_FABRIGENT_DIGEST` in one
-   change, then rerun `npm run verify`.
+`internal/profile/profile.go` rejects malformed profiles, unknown profile versions,
+duplicate or invalid wire identifiers, unknown fields, and limits above the
+BadTower implementation ceilings. When this happens:
 
-## Boundary scan findings
+1. Do not bypass or loosen the check.
+2. Confirm the desired wire contract is compatible with BadTower's closed
+   envelope behavior.
+3. Add or update independent BadTower behavior tests.
+4. Change the local profile in a BadTower release and rerun the repository
+   closure.
 
-`tools/verify-boundary.mjs` scans repository files for forbidden
-authority-capability markers. A finding means a change introduced
-authority-bearing behavior outside the relay boundary; revert or reshape
-the change before release.
+## Starting the service
+
+```sh
+go run ./cmd/badtower \
+  -listen 127.0.0.1:8080 \
+  -data data/badtower.db
+```
+
+The default loopback binding prevents accidental public exposure. Production
+operators must provide their own TLS termination, access controls, process
+supervision, backups, and resource isolation. The database file is
+service-local opaque transport state, not end-to-end delivery evidence.
+
+## Health and shutdown
+
+`GET /healthz` returns only `{"status":"ok"}` and exposes no queue, mailbox,
+endpoint, path, or runtime identity. `SIGINT` and `SIGTERM` trigger bounded
+graceful HTTP shutdown. Expired state is also cleaned once per minute while
+the service runs.

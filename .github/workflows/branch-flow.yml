@@ -26,10 +26,11 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.4.0
         with:
-          node-version: "24"
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
       - name: Verify branch flow fixtures
-        run: node tools/scripts/verify-branch-flow.mjs --self-test
+        run: go test ./internal/branchflow
       - name: Verify branch flow
-        run: node tools/scripts/verify-branch-flow.mjs
+        run: go run ./cmd/verify-branch-flow
