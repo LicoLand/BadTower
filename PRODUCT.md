@@ -31,7 +31,7 @@ The relay is untrusted by design:
 - Client key custody, identity proof, local approvals, or local effects.
 - Client user experience, federation policy, committee governance,
   certification rules, or neutral protocol authority (owned by Fabrigent).
-- Meshrix identities, permissions, and process bootstrap (owned by Meshrix).
+- Application identities, permissions, and process bootstrap.
 - Compatibility aliases, retired-name state discovery, or dual-write paths.
 
 ## Repository
