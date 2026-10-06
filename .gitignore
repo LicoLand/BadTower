@@ -8,3 +8,6 @@ coverage/
 /docs/plans/
 /docs/reports/
 /cache/
+
+# Private local audit evidence and reports. Never publish.
+/.general-auditor/local/
