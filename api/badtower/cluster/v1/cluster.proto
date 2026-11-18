@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package badtower.cluster.v1;
+
+option go_package = "github.com/LicoLand/BadTower/gen/go/badtower/cluster/v1;clusterv1";
+
+service ClusterOperator {
+  rpc Status(StatusRequest) returns (StatusResponse);
+  rpc Bootstrap(BootstrapRequest) returns (MutationResponse);
+  rpc Join(JoinRequest) returns (MutationResponse);
+  rpc CaughtUp(CaughtUpRequest) returns (MutationResponse);
+  rpc Promote(MemberRequest) returns (MutationResponse);
+  rpc Drain(MemberRequest) returns (MutationResponse);
+  rpc Replace(ReplaceRequest) returns (MutationResponse);
+  rpc Remove(MemberRequest) returns (MutationResponse);
+  rpc Rebalance(RebalanceRequest) returns (RebalanceResponse);
+  rpc Backup(BackupRequest) returns (BackupResponse);
+  rpc RestorePreflight(RestorePreflightRequest) returns (RestorePreflightResponse);
+  rpc UpgradePreflight(UpgradePreflightRequest) returns (UpgradePreflightResponse);
+}
+
+message StatusRequest {}
+message BootstrapRequest {}
+message StatusResponse { uint64 member_id = 1; uint64 leader_member_id = 2; uint64 applied_index = 3; uint64 placement_epoch = 4; uint32 member_count = 5; string move_phase = 6; }
+message MutationResponse { uint64 placement_epoch = 1; uint32 member_count = 2; }
+message Member { uint64 id = 1; string fault_domain = 2; uint64 incarnation = 3; uint32 command_version = 4; uint32 store_version = 5; }
+message JoinRequest { Member member = 1; }
+message CaughtUpRequest { uint64 member_id = 1; uint64 applied_index = 2; }
+message MemberRequest { uint64 member_id = 1; }
+message ReplaceRequest { uint64 old_member_id = 1; Member replacement = 2; }
+message RebalanceRequest { uint64 draining_member_id = 1; uint64 replacement_member_id = 2; }
+message RebalanceResponse { uint32 partition = 1; uint64 from_member_id = 2; uint64 to_member_id = 3; uint64 expected_epoch = 4; string phase = 5; bool complete = 6; }
+message BackupRequest { string artifact_root = 1; uint32 chunk_bytes = 2; }
+message BackupResponse { uint64 placement_epoch = 1; uint64 control_applied_index = 2; string digest_sha256 = 3; }
+message RestorePreflightRequest { string backup_root = 1; string isolated_root = 2; string cluster_id = 3; uint64 placement_epoch = 4; uint32 min_command_version = 5; uint32 min_store_version = 6; uint32 max_command_version = 7; uint32 max_store_version = 8; }
+message RestorePreflightResponse { uint64 placement_epoch = 1; uint64 control_applied_index = 2; string digest_sha256 = 3; }
+message Version { uint32 command = 1; uint32 store = 2; }
+message UpgradePreflightRequest { Version current = 1; Version next = 2; repeated uint64 leader_member_ids = 3; repeated uint64 unavailable_member_ids = 4; }
+message UpgradeStep { uint32 sequence = 1; uint64 member_id = 2; string stage = 3; Version from = 4; Version to = 5; }
+message UpgradePreflightResponse { repeated UpgradeStep steps = 1; }

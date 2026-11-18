@@ -1,0 +1,41 @@
+name: Verify
+
+on:
+  pull_request:
+  push:
+    branches: ["nightly", "stable", "release"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.4.0
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+      - name: Generate protobuf
+        run: |
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.11
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.6.2
+          protoc -I api --go_out=gen/go --go_opt=paths=source_relative \
+            --go-grpc_out=gen/go --go-grpc_opt=paths=source_relative \
+            badtower/station/v1/station.proto
+      - name: Format
+        run: test -z "$(gofmt -l .)"
+      - name: Focused native tests
+        run: go test -race -short ./...
+      - name: Vet
+        run: go vet ./...
+      - name: Build
+        run: go build ./...

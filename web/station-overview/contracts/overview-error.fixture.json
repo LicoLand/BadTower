@@ -1,0 +1,6 @@
+{
+  "schema": "badtower.station-overview.error.v1",
+  "reason": "CAPACITY_EXCEEDED",
+  "retryable": true,
+  "retryAfterMs": 15000
+}

@@ -1,0 +1,18 @@
+build/
+coverage/
+data/
+*.db
+*.db.lock
+*.log
+.DS_Store
+
+# Local-only governance assets (plans, reports, caches)
+/docs/plans/
+/docs/reports/
+/cache/
+
+# Frontend dependencies (dist/ stays tracked for Go embed)
+/web/station-overview/node_modules/
+
+# Private local audit evidence
+/.general-auditor/local/

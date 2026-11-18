@@ -1,0 +1,86 @@
+{
+  "schema": "badtower.cluster-capacity-profile.v1",
+  "profileId": "cluster-general-v1",
+  "status": "candidate",
+  "topology": {
+    "bootstrapMembers": 3,
+    "maximumMembers": 4,
+    "faultDomains": 4,
+    "partitions": 64,
+    "replicationFactor": 3
+  },
+  "consensusBounds": {
+    "heartbeatTicks": 1,
+    "electionTicks": 10,
+    "tickMilliseconds": 100,
+    "maxProposalBytes": 2097152,
+    "maxMessageBytes": 1048576,
+    "maxUncommittedEntryBytes": 8388608,
+    "maxInflightMessages": 64,
+    "maxInflightBytes": 8388608,
+    "peerQueueDepth": 256,
+    "proposalQueueDepth": 64,
+    "snapshotStreamChunkBytes": 65536,
+    "snapshotStreamMaxBytes": 1073741824,
+    "snapshotStreamConcurrency": 2
+  },
+  "carrier": {
+    "transport": "https",
+    "httpMajor": 2,
+    "tlsMinimum": "1.3",
+    "tlsMaximum": "1.3",
+    "mutualAuthentication": true
+  },
+  "focused": {
+    "enabledByDefault": true,
+    "maximumDurationSeconds": 600,
+    "minimumNativeMutations": 36,
+    "minimumColdNamespaceCompletions": 1,
+    "maximumFailoverRtoMilliseconds": 15000,
+    "committedWriteRpo": 0,
+    "requiredScenarios": [
+      "three-member-tls-quorum",
+      "fourth-member-learner-join",
+      "interrupted-rebalance-resume",
+      "stream-snapshot-catchup",
+      "duplicate-idempotency",
+      "cold-namespace-progress",
+      "coordinated-backup",
+      "isolated-restore",
+      "rolling-upgrade-preflight",
+      "surviving-quorum-rpo-rto"
+    ]
+  },
+  "load": {
+    "run": "not-run",
+    "optInEnvironment": "BADTOWER_CLUSTER_LOAD",
+    "durationMinutes": 30,
+    "clients": 24,
+    "namespaces": 64,
+    "hotPartitionTrafficShare": 0.60,
+    "payloadKiB": [1, 16, 256]
+  },
+  "soak": {
+    "run": "not-run",
+    "optInEnvironment": "BADTOWER_CLUSTER_SOAK",
+    "durationMinutes": 120,
+    "targetLoadShare": 0.60,
+    "faults": [
+      "leader-restart",
+      "asymmetric-network-partition",
+      "duplicate-and-reordered-peer-delivery",
+      "slow-network",
+      "slow-disk",
+      "snapshot-interruption",
+      "rebalance-interruption"
+    ]
+  },
+  "evidence": {
+    "schema": "badtower.cluster-capacity-evidence.v1",
+    "privacy": "aggregate-only",
+    "focusedRun": "source-gate",
+    "loadRun": "not-run",
+    "soakRun": "not-run",
+    "formalCapacityClaim": false
+  }
+}

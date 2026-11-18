@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://badtower.network/plugins/licoarc-candidate/config.schema.json",
+  "title": "BadTower exact LicoArc Candidate adapter configuration v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "listener", "native", "stateRoot", "signingKeyPath", "stationDescriptorDigest", "descriptorNotAfter", "budgets"],
+  "properties": {
+    "schema": { "const": "badtower.licoarc-candidate.config.v1" },
+    "listener": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["address", "certificatePath", "privateKeyPath"],
+      "properties": {
+        "address": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "certificatePath": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "privateKeyPath": { "type": "string", "minLength": 1, "maxLength": 4096 }
+      }
+    },
+    "native": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["endpoint", "serverName", "caPath", "namespace", "bearer"],
+      "properties": {
+        "endpoint": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "serverName": { "type": "string", "minLength": 1, "maxLength": 253 },
+        "caPath": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "namespace": { "type": "string", "pattern": "^ns_[A-Za-z0-9_-]{22}$" },
+        "bearer": { "type": "string", "minLength": 1, "maxLength": 4096 }
+      }
+    },
+    "stateRoot": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "signingKeyPath": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "stationDescriptorDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "descriptorNotAfter": { "type": "integer", "minimum": 1 },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxConcurrentOperations", "maxQueuedOperations", "maxStateBytes"],
+      "properties": {
+        "maxConcurrentOperations": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "maxQueuedOperations": { "type": "integer", "minimum": 1, "maximum": 256 },
+        "maxStateBytes": { "type": "integer", "minimum": 1, "maximum": 1073741824 }
+      }
+    }
+  }
+}

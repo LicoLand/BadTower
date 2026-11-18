@@ -1,0 +1,39 @@
+{
+  "schema": "badtower.station-capacity-profile.v1",
+  "profileId": "single-node-general-v1",
+  "status": "candidate-unverified",
+  "targetTerminalUnitsPerSecond": 3000,
+  "workload": {
+    "namespaces": 100,
+    "clients": 128,
+    "workerAllocation": "bounded-producers-plus-at-most-64-address-workers",
+	"readyAddressDebounceMilliseconds": 5,
+	"readyAddressLimit": 200,
+	"readyAddressKeyBytes": 65536,
+    "addressesPerNamespace": 2,
+    "claimBatchMaximum": 32,
+    "settleBatchMaximum": 32,
+    "payloadKiB": [1, 16, 256],
+    "payloadWeights": [0.80, 0.15, 0.05],
+    "settlementShares": {
+      "complete": 0.90,
+      "release": 0.05,
+      "extend": 0.03,
+      "naturalClaimTimeout": 0.02
+    }
+  },
+  "measurement": {
+    "throughputNumerator": "terminal-settled-units",
+	"fairness": "jain-index-of-terminal-to-accepted-ratio-per-active-namespace",
+    "terminalOutcomes": ["COMPLETED", "ATTEMPT_LIMIT"],
+    "elapsed": "actual-monotonic-segment-elapsed",
+    "latency": "bounded-sharded-log-histogram",
+    "clock": "real-elapsed-plus-fault-offset",
+    "payloadAllocation": "prebuilt-read-only-mixture"
+  },
+  "evidence": {
+    "shortDeterministicAndRace": "focused-pass",
+    "thirtyMinuteLoad": "not-run",
+    "twoHourSoakAndFaults": "not-run"
+  }
+}

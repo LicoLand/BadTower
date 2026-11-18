@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+package badtower.station.v1;
+
+option go_package = "github.com/LicoLand/BadTower/gen/go/badtower/station/v1;stationv1";
+
+service Station {
+  rpc Reserve(ReserveRequest) returns (ReserveResponse);
+  rpc Submit(SubmitRequest) returns (SubmitResponse);
+  rpc Claim(ClaimRequest) returns (ClaimResponse);
+  rpc Settle(SettleRequest) returns (SettleResponse);
+  rpc GetCapacity(GetCapacityRequest) returns (GetCapacityResponse);
+}
+
+message ReserveRequest {
+  string request_id = 1;
+  optional string address_id = 2;
+  uint64 ttl_ms = 3;
+}
+
+message ReserveResponse {
+  string address_id = 1;
+  int64 expires_at_unix_ms = 2;
+  bool created = 3;
+}
+
+message SubmitRequest {
+  string request_id = 1;
+  string address_id = 2;
+  bytes payload = 3;
+  uint64 ttl_ms = 4;
+}
+
+message SubmitResponse {
+  string unit_id = 1;
+  int64 accepted_at_unix_ms = 2;
+  int64 expires_at_unix_ms = 3;
+}
+
+message ClaimRequest {
+  string request_id = 1;
+  string address_id = 2;
+  uint32 max_units = 3;
+  uint64 max_bytes = 4;
+  uint64 visibility_timeout_ms = 5;
+  uint64 wait_timeout_ms = 6;
+}
+
+message ClaimedUnit {
+  string unit_id = 1;
+  bytes payload = 2;
+  int64 accepted_at_unix_ms = 3;
+  int64 expires_at_unix_ms = 4;
+  uint32 delivery_attempt = 5;
+}
+
+message ClaimResponse {
+  optional string claim_id = 1;
+  uint64 claim_epoch = 2;
+  int64 claim_expires_at_unix_ms = 3;
+  repeated ClaimedUnit units = 4;
+}
+
+enum SettleAction {
+  SETTLE_ACTION_UNSPECIFIED = 0;
+  SETTLE_ACTION_COMPLETE = 1;
+  SETTLE_ACTION_RELEASE = 2;
+  SETTLE_ACTION_EXTEND = 3;
+}
+
+message SettleEntry {
+  string unit_id = 1;
+  SettleAction action = 2;
+  uint64 delay_ms = 3;
+  uint64 extension_ms = 4;
+}
+
+message SettleRequest {
+  string request_id = 1;
+  string claim_id = 2;
+  uint64 claim_epoch = 3;
+  repeated SettleEntry entries = 4;
+}
+
+enum SettleOutcome {
+  SETTLE_OUTCOME_UNSPECIFIED = 0;
+  SETTLE_OUTCOME_COMPLETED = 1;
+  SETTLE_OUTCOME_RELEASED = 2;
+  SETTLE_OUTCOME_EXTENDED = 3;
+  SETTLE_OUTCOME_ATTEMPT_LIMIT = 4;
+}
+
+message SettledUnit {
+  string unit_id = 1;
+  SettleOutcome outcome = 2;
+  int64 effective_at_unix_ms = 3;
+}
+
+message SettleResponse {
+  repeated SettledUnit units = 1;
+}
+
+message GetCapacityRequest {}
+
+enum Pressure {
+  PRESSURE_UNSPECIFIED = 0;
+  PRESSURE_NORMAL = 1;
+  PRESSURE_SOFT = 2;
+  PRESSURE_HARD = 3;
+}
+
+message ResourceVector {
+  uint64 addresses = 1;
+  uint64 units = 2;
+  uint64 retained_bytes = 3;
+  uint64 active_claims = 4;
+  uint64 idempotency_records = 5;
+  uint64 connections = 6;
+  uint64 in_flight_rpcs = 7;
+}
+
+message GetCapacityResponse {
+  string profile_id = 1;
+  Pressure pressure = 2;
+  ResourceVector namespace_usage = 3;
+  ResourceVector namespace_limit = 4;
+  uint32 retry_after_ms = 5;
+}
+
+message StationFailure {
+  string reason = 1;
+  bool retryable = 2;
+  uint32 retry_after_ms = 3;
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://badtower.network/contracts/extension/v1/plugin-descriptor.schema.json",
+  "title": "BadTower External Plugin Descriptor v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "pluginId",
+    "artifactVersion",
+    "configurationSchema",
+    "localStateSchema",
+    "externalProtocol",
+    "contract",
+    "listener",
+    "nativeScope",
+    "budgets",
+    "binary"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "badtower.extension-descriptor.v1" },
+    "pluginId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]{2,63}$" },
+    "artifactVersion": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?$" },
+    "configurationSchema": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]{2,127}$" },
+    "localStateSchema": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]{2,127}$" },
+    "externalProtocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity", "line", "lifecycle"],
+      "properties": {
+        "identity": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "line": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "lifecycle": { "enum": ["Candidate", "Published", "Retired"] }
+      }
+    },
+    "contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum", "maximum"],
+      "properties": {
+        "minimum": { "const": "1.0.0" },
+        "maximum": { "const": "1.0.0" }
+      }
+    },
+    "listener": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "transport"],
+      "properties": {
+        "owner": { "const": "external-plugin" },
+        "transport": { "type": "string", "minLength": 1, "maxLength": 64 }
+      }
+    },
+    "nativeScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["namespaceMode", "credentialMode"],
+      "properties": {
+        "namespaceMode": { "const": "one-opaque-namespace" },
+        "credentialMode": { "const": "scoped-native-caller" }
+      }
+    },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxConcurrentCalls", "maxQueuedCalls", "maxRequestBytes", "maxStateBytes", "maxMetricSeries"],
+      "properties": {
+        "maxConcurrentCalls": { "type": "integer", "minimum": 1, "maximum": 4096 },
+        "maxQueuedCalls": { "type": "integer", "minimum": 1, "maximum": 65536 },
+        "maxRequestBytes": { "type": "integer", "minimum": 1, "maximum": 67108864 },
+        "maxStateBytes": { "type": "integer", "minimum": 1, "maximum": 1099511627776 },
+        "maxMetricSeries": { "type": "integer", "minimum": 1, "maximum": 64 }
+      }
+    },
+    "binary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "pattern": "^bin/[a-z0-9][a-z0-9._-]{1,127}$" },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

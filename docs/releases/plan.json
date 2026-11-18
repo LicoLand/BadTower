@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LicoLand/.github/main/schemas/release-plan.schema.json",
+  "schemaVersion": 2,
+  "repository": "LicoLand/BadTower",
+  "profile": "semver",
+  "currentVersion": "0.1.0",
+  "versionSources": [
+    {
+      "format": "text",
+      "path": "VERSION"
+    }
+  ],
+  "changelog": "CHANGELOG.md",
+  "nextRelease": null,
+  "releases": [],
+  "components": []
+}

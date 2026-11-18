@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "badtower.station-overview.v1",
+  "description": "Privacy-minimal aggregate snapshot consumed by the BadTower Station Overview panel. Bounded, low-cardinality, aggregate-only: no identifiers, payloads, credentials, machine addresses, local paths, timestamps, raw rows, or raw errors.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "lifecycle", "readiness", "pressure", "capacity", "pollAfterMs"],
+  "properties": {
+    "schema": { "const": "badtower.station-overview.v1" },
+    "lifecycle": { "enum": ["STARTING", "RUNNING", "DRAINING", "STOPPED"] },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reason"],
+      "properties": {
+        "status": { "enum": ["SERVING", "NOT_SERVING"] },
+        "reason": { "enum": ["NONE", "STARTING", "CLOCK_UNSAFE", "DRAINING", "STOPPED"] }
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "status": { "const": "SERVING" },
+            "reason": { "const": "NONE" }
+          }
+        },
+        {
+          "properties": {
+            "status": { "const": "NOT_SERVING" },
+            "reason": { "enum": ["STARTING", "CLOCK_UNSAFE", "DRAINING", "STOPPED"] }
+          }
+        }
+      ]
+    },
+    "pressure": { "enum": ["NORMAL", "SOFT", "HARD"] },
+    "capacity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["configuredNamespaceCount", "implementationCeiling", "aggregateUsage"],
+      "properties": {
+        "configuredNamespaceCount": { "type": "integer", "minimum": 0 },
+        "implementationCeiling": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["namespaceCount", "perNamespace"],
+          "properties": {
+            "namespaceCount": { "type": "integer", "minimum": 0 },
+            "perNamespace": { "$ref": "#/$defs/resourceVector" }
+          }
+        },
+        "aggregateUsage": { "$ref": "#/$defs/resourceVector" }
+      }
+    },
+    "pollAfterMs": { "type": "integer", "minimum": 0 }
+  },
+  "$defs": {
+    "resourceVector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["addresses", "transportUnits", "logicalRetainedBytes", "activeClaims"],
+      "properties": {
+        "addresses": { "type": "integer", "minimum": 0 },
+        "transportUnits": { "type": "integer", "minimum": 0 },
+        "logicalRetainedBytes": { "type": "integer", "minimum": 0 },
+        "activeClaims": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "badtower.station-overview.v1",
+  "lifecycle": "RUNNING",
+  "readiness": { "status": "SERVING", "reason": "NONE" },
+  "pressure": "NORMAL",
+  "capacity": {
+    "configuredNamespaceCount": 3,
+    "implementationCeiling": {
+      "namespaceCount": 1000,
+      "perNamespace": {
+        "addresses": 10000,
+        "transportUnits": 100000,
+        "logicalRetainedBytes": 4294967296,
+        "activeClaims": 10000
+      }
+    },
+    "aggregateUsage": {
+      "addresses": 128,
+      "transportUnits": 4096,
+      "logicalRetainedBytes": 268435456,
+      "activeClaims": 12
+    }
+  },
+  "pollAfterMs": 5000
+}
